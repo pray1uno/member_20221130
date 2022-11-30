@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>member_save</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container">
+    <form action="/member/save" method="post" name="newSave">
+        <label for="memberEmail">이메일</label>
+        <input type="text" name="memberEmail" id="memberEmail" class="form-control" placeholder="이메일">
+
+        <label for="memberPassword">비밀번호</label>
+        <input type="text" name="memberPassword" id="memberPassword" class="form-control" placeholder="비밀번호">
+
+        <label for="memberName">이름</label>
+        <input type="text" name="memberName" id="memberName" class="form-control" placeholder="이름">
+
+        <label for="memberAge">나이</label>
+        <input type="text" name="memberAge" id="memberAge" class="form-control" placeholder="나이">
+
+        <label for="memberPhone">전화번호</label>
+        <input type="text" name="memberPhone" id="memberPhone" class="form-control" placeholder="000-0000-0000">
+
+        <input type="button" onclick="new_member_save()" value="회원가입" class="btn">
+    </form>
+</div>
+</body>
+<script>
+    const new_member_save = () => {
+        document.newSave.submit();
+    }
+</script>
+</html>
