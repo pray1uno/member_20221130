@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>member_list</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.mis.css}">
+</head>
+<body>
+<div class="container">
+    <table class="table table-hover">
+        <tr>
+            <th>id</th>
+            <th>이메일</th>
+            <th>비밀번호</th>
+            <th>이름</th>
+            <th>나이</th>
+            <th>전화번호</th>
+            <th>조회</th>
+            <th>삭제</th>
+        </tr>
+        <tr th:each="list: ${memberList}">
+            <td th:text="${list.id}"></td>
+            <td th:text="${list.memberEmail}"></td>
+            <td th:text="${list.memberPassword}"></td>
+            <td th:text="${list.memberName}"></td>
+            <td th:text="${list.memberAge}"></td>
+            <td th:text="${list.memberPhone}"></td>
+            <td>
+                <a th:href="@{|/member/${list.id}|}">상세조회</a>
+            </td>
+            <td><a th:href="@{|/member/delete/${list.id}|}">삭제하기</a></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

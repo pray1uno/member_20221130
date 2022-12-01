@@ -31,7 +31,20 @@ public class MemberEntity {
     private String memberPhone;
 
     public static MemberEntity toSaveEntity(MemberDTO memberDTO) {
+        // save 메서드 타고 변환 시 id 값이 없는 거는 insert 용
         MemberEntity memberEntity = new MemberEntity();
+        memberEntity.setMemberEmail(memberDTO.getMemberEmail());
+        memberEntity.setMemberPassword(memberDTO.getMemberPassword());
+        memberEntity.setMemberName(memberDTO.getMemberName());
+        memberEntity.setMemberAge(memberDTO.getMemberAge());
+        memberEntity.setMemberPhone(memberDTO.getMemberPhone());
+        return memberEntity;
+    }
+
+    public static MemberEntity toUpdateEntity(MemberDTO memberDTO) {
+        // save 메서드 타고 변환 시 id 값이 있는 거는 update 용
+        MemberEntity memberEntity = new MemberEntity();
+        memberEntity.setId(memberDTO.getId());
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
         memberEntity.setMemberPassword(memberDTO.getMemberPassword());
         memberEntity.setMemberName(memberDTO.getMemberName());

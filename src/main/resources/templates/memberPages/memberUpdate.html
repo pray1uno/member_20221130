@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>update</title>
+</head>
+<body>
+<div>
+    <form action="/member/update" name="updateForm" method="post">
+        ID <input type="text" name="id" th:value="${update.id}">
+        이메일 <input type="text" name="memberEmail" th:value="${update.memberEmail}">
+        비밀번호 <input type="text" name="memberPassword" id="memberPassword">
+        이름 <input type="text" name="memberName" th:value="${update.memberName}">
+        나이 <input type="text" name="memberAge" th:value="${update.memberAge}">
+        연락처 <input type="text" name="memberPhone" th:value="${update.memberPhone}">
+        <input type="button" onclick="update()" th:value="수정">
+    </form>
+</div>
+</body>
+<script th:inline="javascript"> // 시작태그 안에 이거 써줘야 모델데이터를 자바스크립트에서 원활하게 사용할 수 있음(타임리프)
+    const update = () => {
+        const passwordDB = [[${update.memberPassword}]];
+        const passwordInput = document.getElementById("memberPassword").value;
+
+        if (passwordDB == passwordInput) {
+            document.updateForm.submit();
+        } else {
+            alert("비밀번호가 맞지 않습니다.")
+        }
+
+    }
+</script>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>member_detail</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.mis.css}">
+</head>
+<body>
+<div class="container">
+    <table class="table table-hover">
+        <tr>
+            <th>번호</th>
+            <td th:text="${findById.id}"></td>
+        </tr>
+        <tr>
+            <th>이메일</th>
+            <td th:text="${findById.memberEmail}"></td>
+        </tr>
+        <tr>
+            <th>비밀번호</th>
+            <td th:text="${findById.memberPassword}"></td>
+        </tr>
+        <tr>
+            <th>이름</th>
+            <td th:text="${findById.memberName}"></td>
+        </tr>
+        <tr>
+            <th>나이</th>
+            <td th:text="${findById.memberAge}"></td>
+        </tr>
+        <tr>
+            <th>연락처</th>
+            <td th:text="${findById.memberPhone}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
