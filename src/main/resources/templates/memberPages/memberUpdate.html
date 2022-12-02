@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>update</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 </head>
 <body>
 <div>
@@ -14,20 +16,53 @@
         나이 <input type="text" name="memberAge" th:value="${update.memberAge}">
         연락처 <input type="text" name="memberPhone" th:value="${update.memberPhone}">
         <input type="button" onclick="update()" th:value="수정">
+        <input type="button" onclick="updateAxios()" value="수정(axios)">
     </form>
 </div>
 </body>
 <script th:inline="javascript"> // 시작태그 안에 이거 써줘야 모델데이터를 자바스크립트에서 원활하게 사용할 수 있음(타임리프)
-    const update = () => {
-        const passwordDB = [[${update.memberPassword}]];
-        const passwordInput = document.getElementById("memberPassword").value;
+const update = () => {
+    const passwordDB = [[${update.memberPassword}]];
+    const passwordInput = document.getElementById("memberPassword").value;
 
-        if (passwordDB == passwordInput) {
-            document.updateForm.submit();
-        } else {
-            alert("비밀번호가 맞지 않습니다.")
-        }
-
+    if (passwordDB == passwordInput) {
+        document.updateForm.submit();
+    } else {
+        alert("비밀번호가 맞지 않습니다.")
     }
+}
+
+const updateAxios = () => {
+    const id = document.getElementsByName("id")[0].value;
+    const email = document.getElementsByName("memberEmail")[0].value;
+    const password = document.getElementsByName("memberPassword")[0].value;
+    const name = document.getElementsByName("memberName")[0].value;
+    const age = document.getElementsByName("memberAge")[0].value;
+    const phone = document.getElementsByName("memberPhone")[0].value;
+    // const id1 = document.querySelector('input[name="id"]').value;
+
+    const passwordDB = [[${update.memberPassword}]];
+    if (password == passwordDB) {
+        axios({
+            method: "put",
+            url: "/member/" + id,
+            data: {
+                id: id,
+                memberEmail: email,
+                memberPassword: password,
+                memberName: name,
+                memberAge: age,
+                memberPhone: phone
+            }
+        }).then(res => {
+            console.log("성공");
+            location.href = "/member/main";
+        }).catch(err => {
+            console.log("실패");
+        })
+    } else {
+        alert("비밀번호가 맞지 않습니다.");
+    }
+}
 </script>
 </html>

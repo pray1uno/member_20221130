@@ -99,4 +99,14 @@ public class MemberService {
         MemberEntity updateEntity = MemberEntity.toUpdateEntity(memberDTO);
         memberRepository.save(updateEntity);
     }
+
+    public String duplicateCheck(String memberEmail) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(memberEmail);
+
+        if (optionalMemberEntity.isPresent()) {
+            return null;
+        } else {
+            return "Y";
+        }
+    }
 }

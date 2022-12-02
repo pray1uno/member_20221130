@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>member_list</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.mis.css}">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -17,6 +18,8 @@
             <th>전화번호</th>
             <th>조회</th>
             <th>삭제</th>
+            <th>조회(axios)</th>
+            <th>삭제(axios)</th>
         </tr>
         <tr th:each="list: ${memberList}">
             <td th:text="${list.id}"></td>
@@ -29,8 +32,74 @@
                 <a th:href="@{|/member/${list.id}|}">상세조회</a>
             </td>
             <td><a th:href="@{|/member/delete/${list.id}|}">삭제하기</a></td>
+            <td>
+                <button type="button" th:onclick="findMember([[${list.id}]])">조회</button>
+            </td>
+            <td>
+                <button type="button" th:onclick="deleteMember([[${list.id}]])">삭제</button>
+            </td>
         </tr>
     </table>
+    <div id="detail_area">
+
+    </div>
 </div>
 </body>
+<script th:inline="javascript">
+    const findMember = (findId) => {
+        const detailArea = document.getElementById("detail_area");
+        axios({
+            method: "get",
+            url: "/member/axios/" + findId,
+        }).then(res => {
+            console.log("then", res);
+            console.log("회원객체", res.data);
+            console.log("회원이메일", res.data.memberEmail);
+            const member = res.data;
+            console.log("member", member);
+
+            let areaResult =
+                "        <table class=\"table table-striped\">\n" +
+                "            <tr>\n" +
+                "                <th>id</th>\n" +
+                "                <td>" + member.id + "</td>\n" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <th>email</th>\n" +
+                "                <td>" + member.memberEmail + "</td>\n" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <th>password</th>\n" +
+                "                <td>" + member.memberPassword + "</td>\n" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <th>name</th>\n" +
+                "                <td> " + member.memberName + "</td>\n" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <th>age</th>\n" +
+                "                <td>" + member.memberAge + "</td>\n" +
+                "            </tr>\n" +
+                "        </table>";
+
+            detailArea.innerHTML = areaResult;
+        }).catch(err => {
+            console.log("catch", err);
+        })
+    }
+
+    const deleteMember = (deleteId) => {
+        axios({
+            method: "delete", // ajax에서 type에도 delete 라고 주면 사용 가능
+            url: "/member/" + deleteId,
+        }).then(res => {
+            alert("삭제 성공");
+            location.href = "/member/";
+        }).catch(err => {
+            alert("삭제 실패");
+        })
+
+
+    }
+</script>
 </html>

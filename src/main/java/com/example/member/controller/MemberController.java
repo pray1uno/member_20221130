@@ -3,6 +3,8 @@ package com.example.member.controller;
 import com.example.member.DTO.MemberDTO;
 import com.example.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -84,5 +86,51 @@ public class MemberController {
     public String update(@ModelAttribute MemberDTO memberDTO) {
         memberService.update(memberDTO);
         return "memberPages/memberMain";
+    }
+
+    @PostMapping("/member/dup-check")
+//    public @ResponseBody String duplicateCheck(@RequestParam("inputEmail") String memberEmail) {
+    public ResponseEntity duplicateCheck(@RequestParam("inputEmail") String memberEmail) {
+        String result = memberService.duplicateCheck(memberEmail);
+//        return result;
+        if (result != null) {
+            return new ResponseEntity<>("사용가능", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("사용불가", HttpStatus.CONFLICT);
+        }
+
+    }
+
+    @GetMapping("/member/axios/{id}")
+    public ResponseEntity findByIdAxios(@PathVariable Long id) {
+        System.out.println("id = " + id);
+        MemberDTO memberDTO = memberService.findById(id);
+        if (memberDTO != null) {
+            return new ResponseEntity<>(memberDTO, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    /*
+    * get : /member/{id}
+    * post : /member/{id}
+    * delete : /member/{id}
+    * put : /member/{id}
+    * 주소값은 같아도 요청 메소드가 어떤건지에 따라서 목적구분이 가능함(rest API)*/
+
+    @DeleteMapping("/member/{id}")
+    public ResponseEntity deleteByAxios(@PathVariable Long id) {
+        System.out.println("id = " + id);
+        memberService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/member/{id}")
+    public ResponseEntity updateByAxios(@PathVariable Long id,
+                                        @RequestBody MemberDTO memberDTO) {
+        System.out.println("id = " + id + ", memberDTO = " + memberDTO);
+        memberService.update(memberDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 }

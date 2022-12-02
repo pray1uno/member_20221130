@@ -4,12 +4,18 @@
     <meta charset="UTF-8">
     <title>member_save</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script th:src="@{/js/jquery.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!--    th : 프로젝트 내부 파일을 가져올 때, cdn 주소는 th 없어도 됨 -->
 </head>
 <body>
 <div class="container">
     <form action="/member/save" method="post" name="newSave">
         <label for="memberEmail">이메일</label>
-        <input type="text" name="memberEmail" id="memberEmail" class="form-control" placeholder="이메일">
+        <input type="text" name="memberEmail" id="memberEmail" class="form-control" placeholder="이메일"
+               onblur="email_check()">
+        <span id="email_dup_check"></span>
+        <br>
 
         <label for="memberPassword">비밀번호</label>
         <input type="text" name="memberPassword" id="memberPassword" class="form-control" placeholder="비밀번호">
@@ -27,9 +33,55 @@
     </form>
 </div>
 </body>
-<script>
+<script th:inline="javascript">
     const new_member_save = () => {
         document.newSave.submit();
+    }
+
+    const email_check = () => {
+        const emailInput = document.getElementById("memberEmail").value;
+        const checkResult = document.getElementById("email_dup_check");
+
+        axios({
+            method: "post",
+            url: "/member/dup-check",
+            params: {
+                inputEmail: emailInput
+            }
+        }).then(res => {
+            console.log("then 함수")
+            console.log(res);
+            checkResult.innerHTML = "사용할 수 있는 이메일 입니다.";
+            checkResult.style.color = "green";
+        }).catch(res => {
+            console.log("catch 함수")
+            console.log(res);
+            checkResult.innerHTML = "이미 사용중인 이메일 입니다.";
+            checkResult.style.color = "red";
+        })
+
+
+        // $.ajax({
+        //     type: "post",
+        //     url: "/member/dup-check",
+        //     dataType: "text",
+        //     data: {
+        //         inputEmail : emailInput
+        //     },
+        //     success: function (result) {
+        //         // if (result == "Y") {
+        //             checkResult.innerHTML = "사용할 수 있는 이메일 입니다.";
+        //             checkResult.style.color = "green";
+        //         // } else {
+        //         //
+        //         // }
+        //     },
+        //     error: function () {
+        //         console.log("힝");
+        //         checkResult.innerHTML = "이미 사용중인 이메일 입니다.";
+        //         checkResult.style.color = "red";
+        //     }
+        // });
     }
 </script>
 </html>
