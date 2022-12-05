@@ -30,17 +30,23 @@ public class MemberController {
     }
 
     @GetMapping("/member/login")
-    public String loginForm() {
+    public String loginForm(@RequestParam(value = "redirectURL", defaultValue = "/member/main") String redirectURL,
+                            Model model) {
+        model.addAttribute("redirectURL", redirectURL);
         return "memberPages/memberLogin";
     }
 
     @PostMapping("/member/login")
     public String login(@ModelAttribute MemberDTO memberDTO,
-                        HttpSession session) {
+                        HttpSession session,
+                        @RequestParam(value = "redirectURL", defaultValue = "/member/main") String redirectURL) {
         MemberDTO result = memberService.login(memberDTO);
         if (result != null) {
             session.setAttribute("login", result.getMemberEmail());
-            return "memberPages/memberMain";
+            // 인터셉터에 걸려서 로그인한 사용자가 직전에 요청한 페이지로 보내주기 위해서 redirect:/직전요청주소
+            // 인터셉터에 걸리지 않고 로그인을 하는 사용자는 defaultValue에 의해서 main으로
+            return "redirect:" + redirectURL;
+//            return "memberPages/memberMain";
         } else {
             return "memberPages/memberLogin";
         }
@@ -132,5 +138,11 @@ public class MemberController {
         memberService.update(memberDTO);
         return new ResponseEntity<>(HttpStatus.OK);
 
+    }
+
+    @GetMapping("/member/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "index";
     }
 }
